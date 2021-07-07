@@ -5,59 +5,55 @@ import threading
 import time
 
 class Servo():
-  def moveToPosition(self, position, idleAfterReach = True, moveDuration = 0.0):
-      self.pwm.ChangeDutyCycle(self.__calcDutyCycle(position))
-      positionDiff = abs(self.lastPosition - position) if self.lastPosition >= 0 else 1.0
-      expectedDuration = positionDiff * self.fullMoveTimeSeconds
-      if moveDuration > expectedDuration:
-          self.__timerCleanup()
-          self.timer = threading.Timer(self.slowMoveChangeTimeSeconds, self.__slowMoveTimerCallback)
-          self.timer.start()
-      elif idleAfterReach:
-          self.__timerCleanup()
-          self.timer = threading.Timer(expectedDuration, self.__idleTimerCallback)
-          self.timer.start()
-      self.lastPosition = position
+  # All durations in seconds
+  def moveToPosition(self, position, idleAfterReach = False):
+      if position < 0.0 or position > 1.0:
+          raise ValueError()
+      if position == self.currentPosition:
+          print("No move required")
+          return
 
-  def __init__(self, gpioPin, fullMoveTimeSeconds = 1.0, slowMoveChangeTimeSeconds = 1/10):
+      self.__timerCleanup()
+      self.targetPosition = position
+      if idleAfterReach:
+          print("Move to %1.3f - idle" % position)
+          # else part: at first move we don't know where we are so assume max
+          positionDiff = position - self.currentPosition if self.currentPosition >= 0 else 1.0
+          expectedDuration = abs(positionDiff) * self.fulldurationDesired
+          self.timer = threading.Timer(expectedDuration, self.__timerCallback)
+          self.timer.start()
+      else:
+          print("Move to %1.3f - keep active" % position)
+          self.currentPosition = position
+      self.pwm.ChangeDutyCycle(self.__calcDutyCycle(position))
+
+  def __init__(self, gpioPin, fulldurationDesired = 1.0, slowMoveStepDuration = 1/10):
       self.GPIO = GPIO.setup(gpioPin, GPIO.OUT)
       self.pwm = GPIO.PWM(gpioPin, 50)
       self.pwm.start(0.0)
-      self.fullMoveTimeSeconds = fullMoveTimeSeconds
-      self.slowMoveChangeTimeSeconds = slowMoveChangeTimeSeconds
-      self.lastPosition = -1.0
+      self.fulldurationDesired = fulldurationDesired
+      self.slowMoveStepDuration = slowMoveStepDuration
+      self.currentPosition = -1.0
       self.timer = None
 
   def __del__(self):
       self.pwm.stop()
       self.__timerCleanup()
 
-  def __calcDutyCycle(self, position): # position 0-1
+  def __calcDutyCycle(self, position): # position [0.0;1.0]
       dutyCycleMs = 1+position # 1-2ms
       return dutyCycleMs * 100.0 / 20.0 # pecent / 20ms cycle
 
-  def __idleTimerCallback(self):
+  def __timerCallback(self):
       self.__timerCleanup()
-      self.pwm.ChangeDutyCycle(0.0)
-
-  def __slowMoveTimerCallback(self):
-      self.__timerCleanup()
-      self.pwm.ChangeDutyCycle(0.0)
+      self.currentPosition = self.targetPosition
+      self.pwm.ChangeDutyCycle(0)
 
   def __timerCleanup(self):
       if(self.timer):
           self.timer.cancel()
           del self.timer
           self.timer = None
-
-class OnOffServo(Servo):
-  def switch(self, on):
-      self.moveToPosition(self.onPos if on else self.offPos, not on)
-
-  def __init__(self, gpioPin, offPos = 0.25, onPos = 0.70, fullMoveTimeSeconds = 1.0, slowMoveChangeTimeSeconds = 1/10):
-      Servo.__init__(self, gpioPin, fullMoveTimeSeconds, slowMoveChangeTimeSeconds)
-      self.offPos = offPos 
-      self.onPos = onPos 
 
 
 class Relay():
@@ -68,18 +64,29 @@ class Relay():
 # init
 GPIO.setmode(GPIO.BCM)
 pause = 2.0
-servos = { OnOffServo(17), OnOffServo(27) }
+offPos = 0.25
+onPos = 0.75
+
+servos = { Servo(17), Servo(27) }
+for servo in servos:
+    servo.moveToPosition(offPos, True)
+
+print("Initialized")
 
 # loop
 try:
     while True:
         for servo in servos:
-            servo.switch(False)
+            servo.moveToPosition(onPos, False)
         time.sleep(pause)
 
         for servo in servos:
-            servo.switch(True)
+            servo.moveToPosition(offPos, True)
         time.sleep(pause)
 except KeyboardInterrupt:
-    del servos
-    GPIO.cleanup()
+    pass
+    #del servos
+    #GPIO.cleanup()
+
+del servos
+GPIO.cleanup()
