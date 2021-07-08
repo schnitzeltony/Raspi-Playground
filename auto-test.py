@@ -16,14 +16,12 @@ class Servo():
       self.__timerCleanup()
       self.targetPosition = position
       if idleAfterReach:
-          print("Move to %1.3f - idle" % position)
           # else part: at first move we don't know where we are so assume max
           positionDiff = position - self.currentPosition if self.currentPosition >= 0 else 1.0
           expectedDuration = abs(positionDiff) * self.fulldurationDesired
           self.timer = threading.Timer(expectedDuration, self.__timerCallback)
           self.timer.start()
       else:
-          print("Move to %1.3f - keep active" % position)
           self.currentPosition = position
       self.pwm.ChangeDutyCycle(self.__calcDutyCycle(position))
 
@@ -71,8 +69,6 @@ servos = { Servo(17), Servo(27) }
 for servo in servos:
     servo.moveToPosition(offPos, True)
 
-print("Initialized")
-
 # loop
 try:
     while True:
@@ -85,8 +81,6 @@ try:
         time.sleep(pause)
 except KeyboardInterrupt:
     pass
-    #del servos
-    #GPIO.cleanup()
 
 del servos
 GPIO.cleanup()
