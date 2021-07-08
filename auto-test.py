@@ -6,8 +6,8 @@ from Servo import Servo
 
 
 class Relay():
-  def __init__(self, gpioPin):
-      self.GPIO = GPIO.setup(gpioPin, GPIO.OUT)
+    def __init__(self, gpioPin):
+        self.GPIO = GPIO.setup(gpioPin, GPIO.OUT)
 
 
 # init
