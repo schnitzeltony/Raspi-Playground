@@ -41,7 +41,7 @@ class SerialLoggerBase:
     def parseLine(self, line):
         pass
 
-class SerialLoggerSearchEntry:
+class SerialLoggerFilterEntry:
     def __init__(self, searchString, logString, ignoreOnEmptySet = []):
         self.searchString = searchString
         self.logString = logString
@@ -87,12 +87,12 @@ class SerialLoggerFilterNotify(SerialLoggerBase):
 class SerialLoggerSystem(SerialLoggerFilterNotify):
     def __init__(self, label, deviceName, baudRate, logFileName):
         searchEntries = [
-            SerialLoggerSearchEntry('Power-Button pushed by user', 'Power-button pressed'),
-            SerialLoggerSearchEntry('Systemaktivitätszustandsänderung: System ist aktiv', 'System activated'),
-            SerialLoggerSearchEntry('-- System-Power-Controller', 'Power on'),
-            SerialLoggerSearchEntry('LCD-Backlight', ''),
-            SerialLoggerSearchEntry('EEPROM-Save', ''),
-            SerialLoggerSearchEntry('USV aktiv halten: Deaktiviert', 'Power off'),
-            SerialLoggerSearchEntry('Error', '', ['#Monitor:FPGAError'])
+            SerialLoggerFilterEntry('Power-Button pushed by user', 'Power-button pressed'),
+            SerialLoggerFilterEntry('Systemaktivitätszustandsänderung: System ist aktiv', 'System activated'),
+            SerialLoggerFilterEntry('-- System-Power-Controller', 'Power on'),
+            SerialLoggerFilterEntry('LCD-Backlight', ''),
+            SerialLoggerFilterEntry('EEPROM-Save', ''),
+            SerialLoggerFilterEntry('USV aktiv halten: Deaktiviert', 'Power off'),
+            SerialLoggerFilterEntry('Error', '', ['#Monitor:FPGAError'])
                          ]
         super().__init__(label, deviceName, baudRate, logFileName, searchEntries)
