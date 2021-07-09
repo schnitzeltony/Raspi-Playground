@@ -3,7 +3,7 @@ import threading
 import re
 import string
 from datetime import datetime
-from KeyboardStopper import AbortSingleton
+from modules.KeyboardStopper import AbortSingleton
 
 class SerialLoggerBase:
     keyboardStopper = AbortSingleton()

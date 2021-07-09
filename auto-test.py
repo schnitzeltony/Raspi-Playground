@@ -2,8 +2,8 @@
 
 import RPi.GPIO as GPIO
 import time
-from Servo import Servo
-from Relay import Relay
+from modules.Servo import Servo
+from modules.Relay import Relay
 
 # init
 GPIO.setmode(GPIO.BCM)

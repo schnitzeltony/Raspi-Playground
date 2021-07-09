@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import time
-from KeyboardStopper import AbortSingleton
-from SerialLogger import SerialLoggerSystem
+from modules.KeyboardStopper import AbortSingleton
+from modules.SerialLogger import SerialLoggerSystem
 
 keyboardStopper = AbortSingleton()
 sysLogger = SerialLoggerSystem("SystemController", "/dev/ttyUSB0", 9600, "SystemController.log")
