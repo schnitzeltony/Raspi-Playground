@@ -40,8 +40,20 @@ class SerialLoggerBase:
     
     def parseLine(self, line):
         pass
-    
-class SerialLoggerSystem(SerialLoggerBase):
+
+class SerialLoggerSearchEntry:
+    def __init__(self, searchString, logString, ignoreOnEmptySet = []):
+        self.searchString = searchString
+        self.logString = logString
+        self.ignoreOnEmptySet = ignoreOnEmptySet
+
+class SerialLoggerFilterNotify(SerialLoggerBase):
+    def __init__(self, label, deviceName, baudRate, logFileName, searchEntries = []):
+        super().__init__(label, deviceName, baudRate, logFileName)
+        self.lock = threading.Lock()
+        self.searchEntries = searchEntries
+        self.messages = []
+
     def getMessages(self):  # other thread
         self.lock.acquire()
         messages = self.messages
@@ -49,27 +61,38 @@ class SerialLoggerSystem(SerialLoggerBase):
         self.lock.release()
         return messages
     
-    def __init__(self, label, deviceName, baudRate, logFileName):
-        super().__init__(label, deviceName, baudRate, logFileName)
-        self.lock = threading.Lock()
-        self.messages = []
-    
     def parseLine(self, line): # log thread
         message = ''
-        if 'Nutzer wünscht shutdown' in line:
-            message = 'Power-button off detected'
-        elif 'Systemaktivitätszustandsänderung: System ist aktiv' in line:
-            message = 'System activated'
-        elif 'Build-Date:' in line:
-            message = "Syscontroller booted"
-        elif "LCD-Backlight" in line:
-            message = line
-        elif 'ERROR' in line:
-            message = line
-                
-        if message != '':
-            self.lock.acquire()
-            self.messages.append(str(datetime.now())  + ' / ' + self.label + ': ' + message)
-            self.lock.release()
+        for entry in self.searchEntries:
+            lineUpper = line.upper()
+            searchUpper = entry.searchString.upper()
+            if searchUpper in lineUpper:
+                if entry.logString != '':
+                    message = entry.logString
+                else:
+                    toIgnore = False
+                    if entry.ignoreOnEmptySet != []:
+                        for ignoreStr in entry.ignoreOnEmptySet:
+                            if ignoreStr in line:
+                                toIgnore = True
+                                break
+                    if not toIgnore:
+                        message = line
+                if message != '':
+                    self.lock.acquire()
+                    self.messages.append(str(datetime.now())  + ' / ' + self.label + ': ' + message)
+                    self.lock.release()
+                    break
 
-    
+class SerialLoggerSystem(SerialLoggerFilterNotify):
+    def __init__(self, label, deviceName, baudRate, logFileName):
+        searchEntries = [
+            SerialLoggerSearchEntry('Power-Button pushed by user', 'Power-button pressed'),
+            SerialLoggerSearchEntry('Systemaktivitätszustandsänderung: System ist aktiv', 'System activated'),
+            SerialLoggerSearchEntry('-- System-Power-Controller', 'Power on'),
+            SerialLoggerSearchEntry('LCD-Backlight', ''),
+            SerialLoggerSearchEntry('EEPROM-Save', ''),
+            SerialLoggerSearchEntry('USV aktiv halten: Deaktiviert', 'Power off'),
+            SerialLoggerSearchEntry('Error', '', ['#Monitor:FPGAError'])
+                         ]
+        super().__init__(label, deviceName, baudRate, logFileName, searchEntries)
