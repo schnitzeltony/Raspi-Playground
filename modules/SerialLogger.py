@@ -1,9 +1,8 @@
 import serial
 import threading
 import re
-import string
 from datetime import datetime
-from modules.KeyboardStopper import AbortSingleton
+from .KeyboardStopper import AbortSingleton
 
 class SerialLoggerBase:
     keyboardStopper = AbortSingleton()
@@ -83,16 +82,3 @@ class SerialLoggerFilterNotify(SerialLoggerBase):
                     self.messages.append(str(datetime.now())  + ' / ' + self.label + ': ' + message)
                     self.lock.release()
                     break
-
-class SerialLoggerSystem(SerialLoggerFilterNotify):
-    def __init__(self, label, deviceName, baudRate, logFileName):
-        searchEntries = [
-            SerialLoggerFilterEntry('Power-Button pushed by user', 'Power-button pressed'),
-            SerialLoggerFilterEntry('Systemaktivitätszustandsänderung: System ist aktiv', 'System activated'),
-            SerialLoggerFilterEntry('-- System-Power-Controller', 'Power on'),
-            SerialLoggerFilterEntry('LCD-Backlight', ''),
-            SerialLoggerFilterEntry('EEPROM-Save', ''),
-            SerialLoggerFilterEntry('USV aktiv halten: Deaktiviert', 'Power off'),
-            SerialLoggerFilterEntry('Error', '', ['#Monitor:FPGAError'])
-                         ]
-        super().__init__(label, deviceName, baudRate, logFileName, searchEntries)

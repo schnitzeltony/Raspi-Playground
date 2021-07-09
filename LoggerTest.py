@@ -2,10 +2,10 @@
 
 import time
 from modules.KeyboardStopper import AbortSingleton
-from modules.SerialLogger import SerialLoggerSystem
+from modules.MT310s2SystemController import MT310s2SystemControllerLogger
 
 keyboardStopper = AbortSingleton()
-sysLogger = SerialLoggerSystem("SystemController", "/dev/ttyUSB0", 9600, "SystemController.log")
+sysLogger = MT310s2SystemControllerLogger("SystemController", "/dev/ttyUSB0", 9600, "SystemController.log")
 
 print()
 
