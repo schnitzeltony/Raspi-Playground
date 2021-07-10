@@ -8,7 +8,7 @@ class MT310s2SystemControllerLogger(SerialLoggerFilterNotify):
             SerialLoggerFilterEntry('-- System-Power-Controller', 'Power on'),
             SerialLoggerFilterEntry('LCD-Backlight', ''),
             SerialLoggerFilterEntry('EEPROM-Save', ''),
-            SerialLoggerFilterEntry('USV aktiv halten: Deaktiviert', 'Power off'),
+            SerialLoggerFilterEntry('USV aktiv halten: Deaktiviert', 'Power off\n'),
             SerialLoggerFilterEntry('Error', '', ['#Monitor:FPGAError'])
                          ]
         super().__init__(label, deviceName, baudRate, logFileName, searchEntries)
