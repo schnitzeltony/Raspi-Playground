@@ -37,7 +37,7 @@ class Servo():
 
     def __calcDutyCycle(self, position): # position [0.0;1.0]
         dutyCycleMs = 1+position # 1-2ms
-        return dutyCycleMs * 100.0 / 20.0 # pecent / 20ms cycle
+        return dutyCycleMs * 100.0 / 20.0 # percent / 20ms cycle
 
     def __timerCallback(self):
         self.__timerCleanup()
