@@ -1,5 +1,4 @@
 import json
-from os import error
 from .LoggerLinuxConsoleImx6 import LoggerLinuxConsoleImx6
 from .LoggerMT310s2SystemController import LoggerMT310s2SystemController
 
