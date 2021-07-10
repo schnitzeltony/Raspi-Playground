@@ -1,0 +1,24 @@
+{
+    "loggers": [
+        {
+            "label": "DUT1-systemcontroller",
+            "tty": "/dev/ttyUSB0",
+            "type": "MT310s2-Systemcontroller"
+        },
+        {
+            "label": "DUT1-linux-console",
+            "tty": "/dev/ttyUSB1",
+            "type": "Linux-Console"
+        },
+        {
+            "label": "DUT2-systemcontroller",
+            "tty": "/dev/ttyUSB2",
+            "type": "MT310s2-Systemcontroller"
+        },
+        {
+            "label": "DUT2-linux-console",
+            "tty": "/dev/ttyUSB3",
+            "type": "Linux-Console"
+        }
+    ]
+}
