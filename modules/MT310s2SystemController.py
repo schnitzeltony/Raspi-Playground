@@ -1,7 +1,7 @@
 from .SerialLogger import *
 
 class MT310s2SystemControllerLogger(SerialLoggerFilterNotify):
-    def __init__(self, label, deviceName, baudRate, logFileName):
+    def __init__(self, label, deviceName, logFileName):
         searchEntries = [
             SerialLoggerFilterEntry('Power-Button pushed by user', 'Power-button pressed'),
             SerialLoggerFilterEntry('Systemaktivitätszustandsänderung: System ist aktiv', 'System activated'),
@@ -11,4 +11,4 @@ class MT310s2SystemControllerLogger(SerialLoggerFilterNotify):
             SerialLoggerFilterEntry('USV aktiv halten: Deaktiviert', 'Power off\n'),
             SerialLoggerFilterEntry('Error', '', ['#Monitor:FPGAError'])
                          ]
-        super().__init__(label, deviceName, baudRate, logFileName, searchEntries)
+        super().__init__(label, deviceName, 9600, logFileName, searchEntries)

@@ -6,8 +6,8 @@ from modules.MT310s2SystemController import MT310s2SystemControllerLogger
 from modules.LinuxConsoleImx6 import LinuxConsoleImx6
 
 keyboardStopper = AbortSingleton()
-sysLogger = MT310s2SystemControllerLogger("SystemController", "/dev/ttyUSB0", 9600, "SystemController.log")
-linuxLogger = LinuxConsoleImx6("Linux", "/dev/ttyUSB1", 115200, "Linux.log")
+sysLogger = MT310s2SystemControllerLogger("SystemController", "/dev/ttyUSB0", "SystemController.log")
+linuxLogger = LinuxConsoleImx6("Linux", "/dev/ttyUSB1", "Linux.log")
 
 print()
 
