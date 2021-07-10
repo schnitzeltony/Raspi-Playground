@@ -4,7 +4,7 @@ import re
 from datetime import datetime
 from .KeyboardStopper import AbortSingleton
 
-class SerialLoggerBase:
+class LoggerSerialBase:
     keyboardStopper = AbortSingleton()
     def __init__(self, label, deviceName, baudRate, logFileName):
         self.label = label
@@ -25,7 +25,7 @@ class SerialLoggerBase:
     def __threadFunc(self):
         regEscape = re.compile(r'(\x9B|\x1B\[)[0-?]*[ -\/]*[@-~]')
         while True:
-            if SerialLoggerBase.keyboardStopper.abortRequested():
+            if LoggerSerialBase.keyboardStopper.abortRequested():
                 self.serPort.close()
                 self.logFile.close()
                 break
@@ -40,13 +40,13 @@ class SerialLoggerBase:
     def parseLine(self, line):
         pass
 
-class SerialLoggerFilterEntry:
+class LoggerFilterEntry:
     def __init__(self, searchString, logString, ignoreOnEmptySet = []):
         self.searchString = searchString
         self.logString = logString
         self.ignoreOnEmptySet = ignoreOnEmptySet
 
-class SerialLoggerFilterNotify(SerialLoggerBase):
+class LoggerFilterNotify(LoggerSerialBase):
     def __init__(self, label, deviceName, baudRate, logFileName, searchEntries = []):
         super().__init__(label, deviceName, baudRate, logFileName)
         self.lock = threading.Lock()
