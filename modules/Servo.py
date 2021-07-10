@@ -22,12 +22,11 @@ class Servo():
             self.currentPosition = position
         self.pwm.ChangeDutyCycle(self.__calcDutyCycle(position))
 
-    def __init__(self, gpioPin, fulldurationDesired = 1.0, slowMoveStepDuration = 1/10):
+    def __init__(self, gpioPin, fulldurationDesired = 1.0):
         self.GPIO = GPIO.setup(gpioPin, GPIO.OUT)
         self.pwm = GPIO.PWM(gpioPin, 50)
         self.pwm.start(0.0)
         self.fulldurationDesired = fulldurationDesired
-        self.slowMoveStepDuration = slowMoveStepDuration
         self.currentPosition = -1.0
         self.timer = None
 
