@@ -73,7 +73,7 @@ class AutoRun:
                 if duts:
                     for dut in duts:
                         if 'Servo' in dut:
-                            logging.info('Action: Release button on %s' % dut['Label'])
+                            logging.debug('Action: Release button on %s' % dut['Label'])
                             dut['Servo'].moveToPosition(dut['ServoReleasePos'], True)
 
             self.currentStepNo = self.currentStepNo + 1
@@ -95,7 +95,7 @@ class AutoRun:
                 if duts:
                     for dut in duts:
                         if 'Relay' in dut:
-                            logging.info('Action: Relay on at %s' % dut['Label'])
+                            logging.debug('Action: Relay on at %s' % dut['Label'])
                             dut['Relay'].switch(True)
 
             elif currCmd['type'] == AutoStepTypes.POWER_OFF:
@@ -103,7 +103,7 @@ class AutoRun:
                 if duts:
                     for dut in duts:
                         if 'Relay' in dut:
-                            logging.info('Action: Relay off at %s' % dut['Label'])
+                            logging.debug('Action: Relay off at %s' % dut['Label'])
                             dut['Relay'].switch(False)
 
             elif currCmd['type'] == AutoStepTypes.PUSH_BUTTON:
@@ -111,7 +111,7 @@ class AutoRun:
                 if duts:
                     for dut in duts:
                         if 'Servo' in dut:
-                            logging.info('Action: Press button on %s' % dut['Label'])
+                            logging.debug('Action: Press button on %s' % dut['Label'])
                             dut['Servo'].moveToPosition(dut['ServoPushPos'], False)
 
             elif currCmd['type'] == AutoStepTypes.WAIT:
