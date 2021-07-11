@@ -155,7 +155,11 @@ class AutoRun:
                 onDelaySeconds = currLoop['values'][self.loopListCurr[loopNum]]['seconds']
 
         # build commandlist
-        self.commandList.append({ 'type': AutoStepTypes.INFO, 'msg': 'OnDelay: %i' % onDelaySeconds + ' / OffType: ' + offType + ' / OffTime: %i' % offTimeMinutes} )
+        if offTimeMinutes > 1:
+            strOffTime = '%.2fmin' % offTimeMinutes
+        else:
+            strOffTime = '%.2fs' % (offTimeMinutes * 60)
+        self.commandList.append({ 'type': AutoStepTypes.INFO, 'msg': 'OnDelay: %is' % onDelaySeconds + ' / OffType: ' + offType + ' / OffTime: %s' % strOffTime} )
         self.commandList.append({ 'type': AutoStepTypes.POWER_ON, 'delay': onDelaySeconds } )
         self.commandList.append({ 'type': AutoStepTypes.PUSH_BUTTON, 'delay': self.buttonPressSeconds } )
         self.commandList.append({ 'type': AutoStepTypes.WAIT, 'delay': self.onTimeSeconds } )
