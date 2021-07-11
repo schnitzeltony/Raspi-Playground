@@ -51,7 +51,6 @@ class LoggerFilterEntry:
 class LoggerFilterNotify(LoggerSerialBase):
     def __init__(self, label, deviceName, baudRate, logFileName, searchEntries = []):
         super().__init__(label, deviceName, baudRate, logFileName)
-        self.lock = threading.Lock()
         self.searchEntries = searchEntries
 
     def parseLine(self, line): # log thread
