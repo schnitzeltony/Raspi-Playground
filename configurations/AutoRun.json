@@ -6,19 +6,6 @@
     },
     "loops" : [
         {
-            "type": "offTime",
-            "values" : [
-                { "minutes": 0.1 },
-                { "minutes": 0.2 },
-                { "minutes": 0.5 },
-                { "minutes": 1 },
-                { "minutes": 2 },
-                { "minutes": 5 },
-                { "minutes": 10 },
-                { "minutes": 30 }
-            ]
-        },
-        {
             "type": "offType",
             "values" : [
                 { "type": "Button" },
@@ -32,6 +19,20 @@
                 { "seconds": 4 },
                 { "seconds": 6 },
                 { "seconds": 8 }
+            ]
+        },
+        {
+            "type": "offTime",
+            "values" : [
+                { "minutes": 0.1 },
+                { "minutes": 0.2 },
+                { "minutes": 0.5 },
+                { "minutes": 1 },
+                { "minutes": 2 },
+                { "minutes": 5 },
+                { "minutes": 10 },
+                { "minutes": 30 },
+                { "minutes": 30 }
             ]
         }
     ]
