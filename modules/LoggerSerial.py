@@ -41,10 +41,10 @@ class LoggerSerialBase:
         pass
 
 class LoggerFilterEntry:
-    def __init__(self, searchString, logString, ignoreOnEmptySet = []):
+    def __init__(self, searchString, logString, ignoreStrSet = []):
         self.searchString = searchString
         self.logString = logString
-        self.ignoreOnEmptySet = ignoreOnEmptySet
+        self.ignoreStrSet = ignoreStrSet
 
 class LoggerFilterNotify(LoggerSerialBase):
     def __init__(self, label, deviceName, baudRate, logFileName, searchEntries = []):
@@ -70,8 +70,8 @@ class LoggerFilterNotify(LoggerSerialBase):
                     message = entry.logString
                 else:
                     toIgnore = False
-                    if entry.ignoreOnEmptySet != []:
-                        for ignoreStr in entry.ignoreOnEmptySet:
+                    if entry.ignoreStrSet != []:
+                        for ignoreStr in entry.ignoreStrSet:
                             if ignoreStr in line:
                                 toIgnore = True
                                 break
