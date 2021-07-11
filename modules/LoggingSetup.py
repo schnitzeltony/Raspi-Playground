@@ -1,8 +1,8 @@
 import logging
 
-def LoggingSetup(logFilename):
+def LoggingSetup(logFilename, logLevel = logging.INFO):
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logLevel)
 
     fileFormater = logging.Formatter("%(asctime)s [%(levelname)s]  %(message)s")
     fileHandler = logging.FileHandler(logFilename)
