@@ -1,0 +1,33 @@
+{
+    "common" : {
+        "buttonPressSeconds": 1,
+        "onTimeSeconds": 150,
+        "powerOffDelaySeconds": 30
+    },
+    "loops" : [
+        {
+            "type": "offTime",
+            "values" : [
+                { "minutes": 5 },
+                { "minutes": 15 },
+                { "minutes": 60 }
+            ]
+        },
+        {
+            "type": "offType",
+            "values" : [
+                { "type": "Button" },
+                { "type": "Power" }
+            ]
+        },
+        {
+            "type": "onDelayType",
+            "values" : [
+                { "seconds": 2 },
+                { "seconds": 4 },
+                { "seconds": 6 },
+                { "seconds": 8 }
+            ]
+        }
+    ]
+}
