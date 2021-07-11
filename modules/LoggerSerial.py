@@ -1,5 +1,6 @@
 import serial
 import threading
+import logging
 import re
 from datetime import datetime
 from .KeyboardStopper import AbortSingleton
@@ -17,7 +18,7 @@ class LoggerSerialBase:
             timeout=1)
         self.serPort.flushInput()
         self.logFile = open(logFileName, "a", encoding='utf-8')
-        print("Log file " + logFileName + " opened")
+        logging.info("Log file " + logFileName + " opened")
         self.logFile.write("Logging started at: " + str(datetime.now()) + '\n\n\n')
         self.thread = threading.Thread(target = self.__threadFunc)
         self.thread.start()
@@ -41,25 +42,18 @@ class LoggerSerialBase:
         pass
 
 class LoggerFilterEntry:
-    def __init__(self, searchString, logString, ignoreStrSet = []):
+    def __init__(self, searchString, logString, ignoreStrSet = [], logLevel = logging.INFO):
         self.searchString = searchString
         self.logString = logString
         self.ignoreStrSet = ignoreStrSet
+        self.logLevel = logLevel
 
 class LoggerFilterNotify(LoggerSerialBase):
     def __init__(self, label, deviceName, baudRate, logFileName, searchEntries = []):
         super().__init__(label, deviceName, baudRate, logFileName)
         self.lock = threading.Lock()
         self.searchEntries = searchEntries
-        self.messages = []
 
-    def getMessages(self):  # other thread
-        self.lock.acquire()
-        messages = self.messages
-        self.messages = []
-        self.lock.release()
-        return messages
-    
     def parseLine(self, line): # log thread
         message = ''
         for entry in self.searchEntries:
@@ -78,7 +72,5 @@ class LoggerFilterNotify(LoggerSerialBase):
                     if not toIgnore:
                         message = line
                 if message != '':
-                    self.lock.acquire()
-                    self.messages.append(str(datetime.now())  + ' / ' + self.label + ': ' + message)
-                    self.lock.release()
+                    logging.log(entry.logLevel, self.label + ': ' + message)
                     break

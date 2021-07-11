@@ -1,4 +1,5 @@
 import json
+import logging
 from .Servo import Servo
 from .Relay import Relay
 
@@ -22,12 +23,12 @@ class DUTs:
                         entry["Relay"] = Relay(entry['RelayGPIO'])
                     self.DUTs.append(entry)
                 except Exception as e:
-                    print("Could not load DUT: %s" % entry)
-                    print(e)
+                    logging.warn("Could not load DUT: %s" % entry)
+                    logging.warn(e)
             file.close()
         except Exception as e:
-            print("An error occured loading DUTS:")
-            print(e)
+            logging.warn("An error occured loading DUTS:")
+            logging.warn(e)
 
     def getDuts(self):
         return self.DUTs

@@ -1,3 +1,4 @@
+import logging
 from .LoggerSerial import *
 
 class LoggerMT310s2SystemController(LoggerFilterNotify):
@@ -9,6 +10,6 @@ class LoggerMT310s2SystemController(LoggerFilterNotify):
             LoggerFilterEntry('LCD-Backlight', ''),
             LoggerFilterEntry('EEPROM-Save', ''),
             LoggerFilterEntry('USV aktiv halten: Deaktiviert', 'Power off\n'),
-            LoggerFilterEntry('Error', '', ['#Monitor:FPGAError'])
+            LoggerFilterEntry('Error', '', ['#Monitor:FPGAError'], logging.WARNING)
                          ]
         super().__init__(label, deviceName, 9600, logFileName, searchEntries)

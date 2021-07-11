@@ -1,4 +1,5 @@
 import json
+import logging
 from .LoggerLinuxConsoleImx6 import LoggerLinuxConsoleImx6
 from .LoggerMT310s2SystemController import LoggerMT310s2SystemController
 
@@ -19,17 +20,12 @@ class LoggerFactory:
                     else:
                         raise Exception("Unknown logger type for: %s" % entry)
                 except Exception as e:
-                    print("Could not load logger: %s" % entry)
-                    print(e)
+                    logging.warn("Could not load logger: %s" % entry)
+                    logging.warn(e)
             
             file.close()
         except Exception as e:
-            print("An error occured loading loggers:")
-            print(e)
+            logging.warn('An error occured loading loggers:')
+            logging.warn(e)
 
-    def printLogs(self):
-        for logger in self.loggers:
-            messages = logger.getMessages()
-            for message in messages:
-                print(message)
             
