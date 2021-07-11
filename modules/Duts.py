@@ -6,9 +6,12 @@ from .Relay import Relay
 class DUTs:
     def __init__(self, configurationFileName):
         try:
-            self.DUTs = []
             file = open(configurationFileName, 'r')
             configuration = json.load(file)
+            file.close()
+
+            self.DUTs = []
+
             for entry in configuration['DUTs']:
                 try:
                     if not 'Label' in entry:
@@ -25,7 +28,6 @@ class DUTs:
                 except Exception as e:
                     logging.warn("Could not load DUT: %s" % entry)
                     logging.warn(e)
-            file.close()
         except Exception as e:
             logging.warn("An error occured loading DUTS:")
             logging.warn(e)

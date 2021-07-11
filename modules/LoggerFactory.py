@@ -6,9 +6,12 @@ from .LoggerMT310s2SystemController import LoggerMT310s2SystemController
 class LoggerFactory:
     def __init__(self, configurationFileName):
         try:
-            self.loggers = []
             file = open(configurationFileName, 'r')
             configuration = json.load(file)
+            file.close()
+
+            self.loggers = []
+
             for entry in configuration['loggers']:
                 try:
                     tty = entry['tty']
@@ -23,7 +26,6 @@ class LoggerFactory:
                     logging.warn("Could not load logger: %s" % entry)
                     logging.warn(e)
             
-            file.close()
         except Exception as e:
             logging.warn('An error occured loading loggers:')
             logging.warn(e)
