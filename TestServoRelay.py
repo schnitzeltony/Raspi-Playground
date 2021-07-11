@@ -2,38 +2,44 @@
 
 import RPi.GPIO as GPIO
 import time
+from modules.Duts import DUTs
+
 from modules.Servo import Servo
 from modules.Relay import Relay
 
 # init
 GPIO.setmode(GPIO.BCM)
 pause = 2.0
-offPos = 0.25
-onPos = 0.75
+dutsObj = DUTs('configurations/DUTs.json')
+duts = dutsObj.getDuts()
 
-servos = { Servo(17), Servo(27) }
-for servo in servos:
-    servo.moveToPosition(offPos, True)
-relays = { Relay(23), Relay(24) }
-for relay in relays:
-    relay.switch(False)
 
 # loop
 try:
     while True:
-        for servo in servos:
-            servo.moveToPosition(onPos, False)
-        for relay in relays:
-            relay.switch(True)
+        # off/released
+        for dut in duts:
+            if 'Servo' in dut:
+                print('Release button on %s' % dut['Label'])
+                dut['Servo'].moveToPosition(dut['ServoReleasePos'], True)
+            if 'Relay' in dut:
+                print('Relay on at %s' % dut['Label'])
+                dut['Relay'].switch(False)
+        print()
         time.sleep(pause)
 
-        for servo in servos:
-            servo.moveToPosition(offPos, True)
-        for relay in relays:
-            relay.switch(False)
+        # on/pressed
+        for dut in duts:
+            if 'Servo' in dut:
+                print('Press button on %s' % dut['Label'])
+                dut['Servo'].moveToPosition(dut['ServoPushPos'], False)
+            if 'Relay' in dut:
+                print('Relay off at %s' % dut['Label'])
+                dut['Relay'].switch(True)
+        print()
         time.sleep(pause)
+
 except KeyboardInterrupt:
     pass
 
-del servos
 GPIO.cleanup()

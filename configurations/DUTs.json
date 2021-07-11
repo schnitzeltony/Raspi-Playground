@@ -1,0 +1,17 @@
+{
+    "DUTs": [
+        {
+            "Label": "DUT1",
+            "ServoGPIO": 17,
+            "ServoPushPos": 0.75,
+            "ServoReleasePos": 0.25,
+            "RelayGPIO": 23
+        },
+        {
+            "Label": "DUT2",
+            "ServoGPIO": 27,
+            "ServoPushPos": 0.75,
+            "ServoReleasePos": 0.25
+        }
+    ]
+}
