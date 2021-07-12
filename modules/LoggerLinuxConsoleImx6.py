@@ -11,7 +11,7 @@ class LoggerLinuxConsoleImx6(LoggerFilterNotify):
             LoggerFilterEntry('Started Zera Resource Manager.', 'Resource manager service started'),
             LoggerFilterEntry('usb 2-1: device descriptor', 'USB: down/in trouble?', [], logging.WARNING),
             LoggerFilterEntry('Error', '',
-                                    ['cannot determine file size', 'ti-connectivity', 'regulatory.db'],
+                                    ['cannot determine file size', 'ti-connectivity', 'regulatory.db', 'firmware load for vpu_fw_imx6q.bin'],
                                     logging.ERROR)
                          ]
         super().__init__(label, deviceName, 115200, logFileName, searchEntries)
