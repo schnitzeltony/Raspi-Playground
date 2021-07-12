@@ -51,6 +51,7 @@ class AutoRun:
             self.currentStepNo = -1
             self.currentStepEndTime = datetime.now()
             self.currentSequenceNo = 0
+            self.estimatedDuration = timedelta()
             # build command list
             self.commandList = []
             if len(self.loopCounts) > 0:
@@ -58,6 +59,10 @@ class AutoRun:
                 self.loopEntryCurr = len(self.loopCounts) -1
                 while self.__unfold_loop():
                     pass
+                # calculate estimated duration
+                for cmd in self.commandList:
+                    if 'delay' in cmd:
+                        self.estimatedDuration = self.estimatedDuration + timedelta(seconds = cmd['delay'])
             else:
                 logging.warning('No loops found')
 
@@ -81,7 +86,7 @@ class AutoRun:
                 self.currentStepNo = 0
             if self.currentStepNo == 0:
                 self.currentSequenceNo = self.currentSequenceNo + 1
-                logging.info("*** Start loop %i ***\n" % self.currentSequenceNo)
+                logging.info("*** Start loop %i (estim: %s) ***\n" % (self.currentSequenceNo, self.estimatedDuration))
 
             currCmd = self.commandList[self.currentStepNo]
             if 'delay' in currCmd:
