@@ -8,8 +8,8 @@
         {
             "type": "offType",
             "values" : [
-                { "type": "Button" },
-                { "type": "Power" }
+                { "type": "Power" },
+                { "type": "Button" }
             ]
         },
         {
@@ -32,7 +32,8 @@
                 { "minutes": 5 },
                 { "minutes": 10 },
                 { "minutes": 30 },
-                { "minutes": 30 }
+                { "minutes": 60 },
+                { "minutes": 120 }
             ]
         }
     ]
