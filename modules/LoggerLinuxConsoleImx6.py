@@ -9,6 +9,7 @@ class LoggerLinuxConsoleImx6(LoggerFilterNotify):
             LoggerFilterEntry('Started Zera DSP daemon.', 'DSP service started'),
             LoggerFilterEntry('Started SEC1000 daemon', 'Error calculator service started'),
             LoggerFilterEntry('Started Zera Resource Manager.', 'Resource manager service started'),
+            LoggerFilterEntry('usb 2-1: device descriptor', 'USB: down/in trouble?', [], logging.WARNING),
             LoggerFilterEntry('Error', '',
                                     ['cannot determine file size', 'ti-connectivity', 'regulatory.db'],
                                     logging.ERROR)
