@@ -9,7 +9,7 @@ from modules.AutoRun import AutoRun
 
 pcDebug = False
 
-LoggingSetup('EnduranceTest.log')
+LoggingSetup('ZeraEnduranceTest.log')
 loggerFactory = LoggerFactory('configurations/SerialLogger.json')
 autoRun = AutoRun('configurations/AutoRun.json')
 keyboardStopper = AbortSingleton()
