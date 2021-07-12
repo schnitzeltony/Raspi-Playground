@@ -22,6 +22,7 @@ if not pcDebug:
     GPIO.setmode(GPIO.BCM)
     dutsObj = DUTs('configurations/DUTs.json')
     duts = dutsObj.getDuts()
+    logging.debug(duts)
 
 while not keyboardStopper.abortRequested():
     autoRun.runStep(duts)
