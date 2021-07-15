@@ -4,9 +4,11 @@ import logging
 import re
 from datetime import datetime
 from .KeyboardStopper import AbortSingleton
+from .ThreadCollector import ThreadCollectorSingleton
 
 class LoggerSerialBase:
     keyboardStopper = AbortSingleton()
+    threadColletionSingleton = ThreadCollectorSingleton()
     def __init__(self, label, deviceName, baudRate, logFileName):
         self.label = label
         self.serPort = serial.Serial(
@@ -21,6 +23,7 @@ class LoggerSerialBase:
         logging.info("Log file " + logFileName + " opened")
         self.logFile.write("Logging started at: " + str(datetime.now()) + '\n\n\n')
         self.thread = threading.Thread(target = self.__threadFunc)
+        LoggerSerialBase.threadColletionSingleton.addThread(self.thread)
         self.thread.start()
 
     def __threadFunc(self):

@@ -5,6 +5,7 @@ import logging
 from modules.LoggingSetup import LoggingSetup
 from modules.KeyboardStopper import AbortSingleton
 from modules.LoggerFactory import LoggerFactory
+from modules.ThreadCollector import ThreadCollectorSingleton
 
 keyboardStopper = AbortSingleton()
 
@@ -15,5 +16,9 @@ logging.info("Logger init done\n")
 
 while not keyboardStopper.abortRequested():
     time.sleep(0.1)
+
+logging.info("Wait for logging threads to finish")
+threadCollector = ThreadCollectorSingleton()
+threadCollector.waitForAllToFinish()
 
 logging.info("Done")

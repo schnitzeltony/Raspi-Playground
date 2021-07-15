@@ -6,6 +6,7 @@ from modules.LoggingSetup import LoggingSetup
 from modules.KeyboardStopper import AbortSingleton
 from modules.LoggerFactory import LoggerFactory
 from modules.AutoRun import AutoRun
+from modules.ThreadCollector import ThreadCollectorSingleton
 
 pcDebug = False
 
@@ -30,5 +31,9 @@ while not keyboardStopper.abortRequested():
 
 if not pcDebug:
     GPIO.cleanup()
+
+logging.info("Wait for logging threads to finish")
+threadCollector = ThreadCollectorSingleton()
+threadCollector.waitForAllToFinish()
 
 logging.info("Done")
