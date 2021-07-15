@@ -51,6 +51,7 @@ class AutoRun:
             self.currentStepNo = -1
             self.currentStepEndTime = datetime.now()
             self.currentSequenceNo = 0
+            self.currentPowerUpCount = 0
             self.estimatedDuration = timedelta()
             # build command list
             self.commandList = []
@@ -98,7 +99,8 @@ class AutoRun:
                 logging.info(currCmd['msg'])
 
             elif currCmd['type'] == AutoStepTypes.POWER_ON:
-                logging.info("*** PowerOn ***")
+                self.currentPowerUpCount = self.currentPowerUpCount + 1
+                logging.info("*** PowerOn (%i) ***" % self.currentPowerUpCount)
                 if duts:
                     for dut in duts:
                         if 'Relay' in dut:
