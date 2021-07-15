@@ -178,4 +178,4 @@ class AutoRun:
         else:
             self.commandList.append({ 'type': AutoStepTypes.POWER_OFF, 'delay': self.powerOffDelaySeconds } )
         self.commandList.append({ 'type': AutoStepTypes.WAIT, 'delay': offTimeMinutes * 60} )
-        #self.commandList.append({ 'type': AutoStepTypes.WAIT, 'delay': offTimeMinutes} )
+        #self.commandList.append({ 'type': AutoStepTypes.WAIT, 'delay': offTimeMinutes} ) # for debug
