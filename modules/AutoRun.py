@@ -84,16 +84,18 @@ class AutoRun:
             self.currentStepNo = self.currentStepNo + 1
             if self.currentStepNo >= len(self.commandList):
                 self.currentStepNo = 0
+            # Start of new loop
             if self.currentStepNo == 0:
                 self.currentSequenceNo = self.currentSequenceNo + 1
-                logging.info("*** Start loop %i (estim: %s) ***\n" % (self.currentSequenceNo, self.estimatedDuration))
+                logging.info("*** Start loop %i ***\n" % self.currentSequenceNo)
+                logging.info("*** Estimated time: %s ***\n" % self.estimatedDuration)
 
             currCmd = self.commandList[self.currentStepNo]
             if 'delay' in currCmd:
                 self.currentStepEndTime = datetime.now() + timedelta(seconds = currCmd['delay'])
 
             if currCmd['type'] == AutoStepTypes.INFO:
-                logging.info('*** Start sequence: ' + currCmd['msg'] + ' ***')
+                logging.info(currCmd['msg'])
 
             elif currCmd['type'] == AutoStepTypes.POWER_ON:
                 logging.info("*** PowerOn ***")
@@ -164,7 +166,8 @@ class AutoRun:
             strOffTime = '%.2fmin' % offTimeMinutes
         else:
             strOffTime = '%.2fs' % (offTimeMinutes * 60)
-        self.commandList.append({ 'type': AutoStepTypes.INFO, 'msg': 'OnDelay: %is' % onDelaySeconds + ' / OffType: ' + offType + ' / OffTime: %s' % strOffTime} )
+        self.commandList.append({ 'type': AutoStepTypes.INFO, 'msg': '*** Start sequence: OnDelay: %is' % onDelaySeconds +
+                                 ' / OffType: ' + offType + ' / OffTime: %s' % strOffTime + ' ***\n'} )
         self.commandList.append({ 'type': AutoStepTypes.POWER_ON, 'delay': onDelaySeconds } )
         self.commandList.append({ 'type': AutoStepTypes.PUSH_BUTTON, 'delay': self.buttonPressSeconds } )
         self.commandList.append({ 'type': AutoStepTypes.WAIT, 'delay': self.onTimeSeconds } )
