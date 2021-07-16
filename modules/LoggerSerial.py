@@ -2,6 +2,7 @@ import serial
 import threading
 import logging
 import re
+from .LoggerFilter import *
 from datetime import datetime
 from .KeyboardStopper import AbortSingleton
 from .ThreadCollector import ThreadCollectorSingleton
@@ -43,13 +44,6 @@ class LoggerSerialBase:
     
     def parseLine(self, line):
         pass
-
-class LoggerFilterEntry:
-    def __init__(self, searchString, logString, ignoreStrSet = [], logLevel = logging.INFO):
-        self.searchString = searchString
-        self.logString = logString
-        self.ignoreStrSet = ignoreStrSet
-        self.logLevel = logLevel
 
 class LoggerFilterNotify(LoggerSerialBase):
     def __init__(self, label, deviceName, baudRate, logFileName, searchEntries = []):
