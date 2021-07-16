@@ -38,13 +38,13 @@ class AutoRun:
                 try:
                     for checkLoop in self.loops:
                         if checkLoop['type'] == loop['type']:
-                            raise Exception('Loop of same type already found - ignore loop')
+                            raise RuntimeWarning('Loop of same type already found - ignore loop')
                     if loop['type'] not in ["offTime", "offType", "onDelayType"]:
-                        raise Exception('Unknown loop type - ignoring')
+                        raise RuntimeWarning('Unknown loop type - ignoring')
 
                     self.loops.append(loop)
                     self.loopCounts.append(len(loop['values']))
-                except Exception as e:
+                except RuntimeWarning as e:
                     logging.warn("Could not load loop: %s" % loop)
                     logging.warn(e)
 
@@ -67,7 +67,7 @@ class AutoRun:
             else:
                 logging.warning('No loops found')
 
-        except Exception as e:
+        except (OSError, IOError) as e:
             logging.warn("An error occured loading AutoRun configuration:")
             logging.warn(e)
 
@@ -153,15 +153,18 @@ class AutoRun:
 
         # data for current loop state
         for loopNum in range(len(self.loops)):
-            currLoop = self.loops[loopNum]
-            if currLoop['type'] == 'offTime':
-                offTimeMinutes = currLoop['values'][self.loopListCurr[loopNum]]['minutes']
-            elif currLoop['type'] == 'offType':
-                offType = currLoop['values'][self.loopListCurr[loopNum]]['type']
-                if offType not in ['Button', 'Power']:
-                    raise Exception('Unknown (off) type in: %s' % currLoop)
-            elif currLoop['type'] == 'onDelayType':
-                onDelaySeconds = currLoop['values'][self.loopListCurr[loopNum]]['seconds']
+            try:
+                currLoop = self.loops[loopNum]
+                if currLoop['type'] == 'offTime':
+                    offTimeMinutes = currLoop['values'][self.loopListCurr[loopNum]]['minutes']
+                elif currLoop['type'] == 'offType':
+                    offType = currLoop['values'][self.loopListCurr[loopNum]]['type']
+                    if offType not in ['Button', 'Power']:
+                        raise RuntimeWarning('Unknown (off) type in: %s - ignoring' % currLoop)
+                elif currLoop['type'] == 'onDelayType':
+                    onDelaySeconds = currLoop['values'][self.loopListCurr[loopNum]]['seconds']
+            except RuntimeWarning as e:
+                logging.warn(e)
 
         # build commandlist
         if offTimeMinutes > 1:

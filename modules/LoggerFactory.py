@@ -21,12 +21,12 @@ class LoggerFactory:
                     elif entry['type'] == 'MT310s2-Systemcontroller':
                         self.loggers.append(LoggerMT310s2SystemController(label, tty, label + '.log'))
                     else:
-                        raise Exception("Unknown logger type for: %s" % entry)
-                except Exception as e:
+                        raise RuntimeWarning("Unknown logger type for: %s" % entry)
+                except RuntimeWarning as e:
                     logging.warn("Could not load logger: %s" % entry)
                     logging.warn(e)
             
-        except Exception as e:
+        except (OSError, IOError) as e:
             logging.warn('An error occured loading loggers:')
             logging.warn(e)
 
