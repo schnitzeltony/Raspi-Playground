@@ -1,8 +1,10 @@
 from .LoggerSerial import *
+from .LoggerFilter import *
 
-class LoggerLinuxConsoleImx6(LoggerFilterNotify):
+class LoggerLinuxConsoleImx6():
     def __init__(self, label, deviceName, logFileName):
-        searchEntries = [
+        self.logger = LoggerSerialBase(label, deviceName, 115200, logFileName)
+        filterEntries = [
             LoggerFilterEntry('u-boot', ''),
             LoggerFilterEntry(' login: ', 'Console login reached'),
             LoggerFilterEntry('Started Zera Module Manager.', 'Modulemanager started'),
@@ -16,4 +18,4 @@ class LoggerLinuxConsoleImx6(LoggerFilterNotify):
                                     ['cannot determine file size', 'ti-connectivity', 'regulatory.db', 'firmware load for vpu_fw_imx6q.bin'],
                                     logging.ERROR)
                          ]
-        super().__init__(label, deviceName, 115200, logFileName, searchEntries)
+        self.loggerFilter = LoggerFilter(self.logger, filterEntries, label)

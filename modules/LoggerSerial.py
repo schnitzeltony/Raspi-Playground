@@ -2,7 +2,6 @@ import serial
 import threading
 import logging
 import re
-from .LoggerFilter import *
 from datetime import datetime
 from .KeyboardStopper import AbortSingleton
 from .ThreadCollector import ThreadCollectorSingleton
@@ -20,12 +19,19 @@ class LoggerSerialBase:
             bytesize = serial.EIGHTBITS,
             timeout=1)
         self.serPort.flushInput()
+
         self.logFile = open(logFileName, "a", encoding='utf-8')
         logging.info("Log file " + logFileName + " opened")
         self.logFile.write("Logging started at: " + str(datetime.now()) + '\n\n\n')
+
         self.thread = threading.Thread(target = self.__threadFunc)
         LoggerSerialBase.threadColletionSingleton.addThread(self.thread)
         self.thread.start()
+
+        self.logExtraHandlers = []
+
+    def addLogConsumer(self, logConsumer):
+        self.logExtraHandlers.append(logConsumer.parseLine)
 
     def __threadFunc(self):
         regEscape = re.compile(r'(\x9B|\x1B\[)[0-?]*[ -\/]*[@-~]')
@@ -37,36 +43,9 @@ class LoggerSerialBase:
             line = self.serPort.readline().decode('unicode-escape').replace('\0', '').replace('\r', '').replace('\n', '')
             escaped = regEscape.sub('', line)
             if escaped != "":
-                self.parseLine(escaped)
+                for extraHandler in self.logExtraHandlers:
+                    extraHandler(escaped)
                 escaped = str(datetime.now()) + ': ' + escaped
                 self.logFile.write(escaped + '\n')
                 self.logFile.flush()
     
-    def parseLine(self, line):
-        pass
-
-class LoggerFilterNotify(LoggerSerialBase):
-    def __init__(self, label, deviceName, baudRate, logFileName, searchEntries = []):
-        super().__init__(label, deviceName, baudRate, logFileName)
-        self.searchEntries = searchEntries
-
-    def parseLine(self, line): # log thread
-        message = ''
-        for entry in self.searchEntries:
-            lineUpper = line.upper()
-            searchUpper = entry.searchString.upper()
-            if searchUpper in lineUpper:
-                if entry.logString != '':
-                    message = entry.logString
-                else:
-                    toIgnore = False
-                    if entry.ignoreStrSet != []:
-                        for ignoreStr in entry.ignoreStrSet:
-                            if ignoreStr in line:
-                                toIgnore = True
-                                break
-                    if not toIgnore:
-                        message = line
-                if message != '':
-                    logging.log(entry.logLevel, self.label + ': ' + message)
-                    break

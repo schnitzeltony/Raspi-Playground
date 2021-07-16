@@ -1,9 +1,10 @@
-import logging
 from .LoggerSerial import *
+from .LoggerFilter import *
 
-class LoggerMT310s2SystemController(LoggerFilterNotify):
+class LoggerMT310s2SystemController():
     def __init__(self, label, deviceName, logFileName):
-        searchEntries = [
+        self.logger = LoggerSerialBase(label, deviceName, 9600, logFileName)
+        filterEntries = [
             LoggerFilterEntry('Power-Button pushed by user', 'Power-button pressed'),
             LoggerFilterEntry('Systemaktivitätszustandsänderung: System ist aktiv', 'System activated'),
             LoggerFilterEntry('-- System-Power-Controller', 'Power on'),
@@ -13,4 +14,4 @@ class LoggerMT310s2SystemController(LoggerFilterNotify):
             LoggerFilterEntry('Warning', '', [], logging.WARNING),
             LoggerFilterEntry('Error', '', ['#Monitor:FPGAError'], logging.WARNING)
                          ]
-        super().__init__(label, deviceName, 9600, logFileName, searchEntries)
+        self.loggerFilter = LoggerFilter(self.logger, filterEntries, label)
