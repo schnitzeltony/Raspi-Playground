@@ -1,8 +1,10 @@
 import threading
 import RPi.GPIO as GPIO
+from .ThreadCollector import ThreadCollectorSingleton
 
 class Servo():
     # All durations in seconds
+    threadColletionSingleton = ThreadCollectorSingleton()
     def moveToPosition(self, position, idleAfterReach = False):
         if position < 0.0 or position > 1.0:
             raise ValueError()
@@ -17,6 +19,7 @@ class Servo():
             positionDiff = position - self.currentPosition if self.currentPosition >= 0 else 1.0
             expectedDuration = abs(positionDiff) * self.fulldurationDesired
             self.timer = threading.Timer(expectedDuration, self.__timerCallback)
+            Servo.threadColletionSingleton.addThread(self.timer)
             self.timer.start()
         else:
             self.currentPosition = position
@@ -46,5 +49,6 @@ class Servo():
     def __timerCleanup(self):
         if(self.timer):
             self.timer.cancel()
+            Servo.threadColletionSingleton.removeThread(self.timer)
             del self.timer
             self.timer = None
