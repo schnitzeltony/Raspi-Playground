@@ -12,6 +12,12 @@ class LoggerFilter:
         logger.addLogConsumer(self)
         self.filters = filters
         self.label = label
+        self.hasCriticalFilters = False
+        for filter in filters:
+            if filter.logLevel == logging.CRITICAL:
+                self.hasCriticalFilters = True
+                break
+        self.criticalMessageCount = 0
 
     def parseLine(self, line): # log thread
         message = ''
@@ -32,4 +38,6 @@ class LoggerFilter:
                         message = line
                 if message != '':
                     logging.log(entry.logLevel, self.label + ': ' + message)
+                    if entry.logLevel == logging.CRITICAL:
+                        self.criticalMessageCount = self.criticalMessageCount + 1
                     break

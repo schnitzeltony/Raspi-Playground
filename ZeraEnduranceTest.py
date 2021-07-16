@@ -36,4 +36,7 @@ threadCollector.waitForAllToFinish()
 if not pcDebug:
     GPIO.cleanup()
 
-logging.info("Done")
+logging.info("Done\n\n")
+
+loggerFactory.showCriticalResults()
+print()

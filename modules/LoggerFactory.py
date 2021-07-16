@@ -30,4 +30,10 @@ class LoggerFactory:
             logging.warn('An error occured loading loggers:')
             logging.warn(e)
 
-            
+    def showCriticalResults(self):
+        for logger in self.loggers:
+            if logger.loggerFilter.hasCriticalFilters:
+                if logger.loggerFilter.criticalMessageCount > 0:
+                    logging.critical(logger.logger.label + ' has critical errors')
+                else:
+                    logging.info('\x1b[92m' + logger.logger.label + ' has no critical errors' + '\x1b[0m' )

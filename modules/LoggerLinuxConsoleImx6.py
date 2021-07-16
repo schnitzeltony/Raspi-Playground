@@ -11,6 +11,7 @@ class LoggerLinuxConsoleImx6():
             LoggerFilterEntry('Started Zera DSP daemon.', 'DSP service started'),
             LoggerFilterEntry('Started SEC1000 daemon', 'Error calculator service started'),
             LoggerFilterEntry('Started Zera Resource Manager.', 'Resource manager service started'),
+            LoggerFilterEntry('flip_done timed out', 'This is a bad Variscite CPU!!', [], logging.CRITICAL),
             LoggerFilterEntry('mounting fs with errors', 'File system reported trouble', [], logging.WARNING),
             LoggerFilterEntry('usb 2-1: device descriptor', 'USB: down/in trouble?', [], logging.WARNING),
             LoggerFilterEntry('usb 2-1: device not accepting', 'USB: down/in trouble?', [], logging.WARNING),
