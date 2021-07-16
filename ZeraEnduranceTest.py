@@ -29,11 +29,11 @@ while not keyboardStopper.abortRequested():
     autoRun.runStep(duts)
     time.sleep(0.1)
 
-if not pcDebug:
-    GPIO.cleanup()
-
-logging.info("Wait for logging threads to finish")
+logging.info("Wait for all threads to finish")
 threadCollector = ThreadCollectorSingleton()
 threadCollector.waitForAllToFinish()
+
+if not pcDebug:
+    GPIO.cleanup()
 
 logging.info("Done")
