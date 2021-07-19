@@ -11,6 +11,7 @@ class AutoStepTypes(Enum):
     POWER_OFF = 2
     PUSH_BUTTON = 3
     WAIT = 4
+    CALLBACK = 5
 
 class AutoRun:
     def __init__(self, configurationFileName):
@@ -40,6 +41,7 @@ class AutoRun:
 
             # restruct loop data for more simple handling
             self.loops = []
+            self.callbacks = {}
             self.loopCounts = []
             for loop in configuration['loops']:
                 try:
@@ -138,8 +140,22 @@ class AutoRun:
             elif currCmd['type'] == AutoStepTypes.WAIT:
                 logging.info("*** Wait ***")
 
+            elif currCmd['type'] == AutoStepTypes.CALLBACK:
+                if 'name' in currCmd:
+                    name = currCmd['name']
+                    if name in self.callbacks:
+                        logging.info("*** Run callback %s ***" % name)
+                        self.callbacks[name]()
+                    else:
+                        logging.info("*** Callback %s ignored ***" % name)
+                else:
+                    logging.info("*** Unnamed callback ignored ***")
+
             if 'delay' in currCmd:
                 logging.info("*** Next Cmd in ~%is ***" % currCmd['delay'])
+
+    def addCallback(self, callback, name):
+        self.callbacks[name] = callback
 
     def __unfold_loop(self):
         self.__appendCommands()
@@ -188,6 +204,7 @@ class AutoRun:
         self.commandList.append({ 'type': AutoStepTypes.POWER_ON, 'delay': onDelaySeconds } )
         self.commandList.append({ 'type': AutoStepTypes.PUSH_BUTTON, 'delay': self.buttonPressSeconds } )
         self.commandList.append({ 'type': AutoStepTypes.WAIT, 'delay': self.onTimeSeconds } )
+        self.commandList.append({ 'type': AutoStepTypes.CALLBACK, 'name': 'LinuxConsoleActive' } )
         if offType == "Button":
             self.commandList.append({ 'type': AutoStepTypes.PUSH_BUTTON, 'delay': self.buttonPressSeconds } )
             self.commandList.append({ 'type': AutoStepTypes.WAIT, 'delay': self.powerOffDelaySeconds } )

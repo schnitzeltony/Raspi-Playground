@@ -10,10 +10,15 @@ from modules.ThreadCollector import ThreadCollectorSingleton
 
 pcDebug = False
 
+keyboardStopper = AbortSingleton()
+
 LoggingSetup('ZeraEnduranceTest.log')
 loggerFactory = LoggerFactory('configurations/SerialLogger.json')
+
+def callbackLinuxConsoleActive():
+    logging.info("callbackLinuxConsoleActive TODO")
 autoRun = AutoRun('configurations/AutoRun.json')
-keyboardStopper = AbortSingleton()
+autoRun.addCallback(callbackLinuxConsoleActive, 'LinuxConsoleActive')
 
 duts = None
 if not pcDebug:
