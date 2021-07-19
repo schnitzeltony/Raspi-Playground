@@ -204,7 +204,8 @@ class AutoRun:
         self.commandList.append({ 'type': AutoStepTypes.POWER_ON, 'delay': onDelaySeconds } )
         self.commandList.append({ 'type': AutoStepTypes.PUSH_BUTTON, 'delay': self.buttonPressSeconds } )
         self.commandList.append({ 'type': AutoStepTypes.WAIT, 'delay': self.onTimeSeconds } )
-        self.commandList.append({ 'type': AutoStepTypes.CALLBACK, 'name': 'LinuxConsoleActive' } )
+        self.commandList.append({ 'type': AutoStepTypes.CALLBACK, 'name': 'LinuxConsoleCommands' } )
+        self.commandList.append({ 'type': AutoStepTypes.WAIT, 'delay': 10 } )
         if offType == "Button":
             self.commandList.append({ 'type': AutoStepTypes.PUSH_BUTTON, 'delay': self.buttonPressSeconds } )
             self.commandList.append({ 'type': AutoStepTypes.WAIT, 'delay': self.powerOffDelaySeconds } )

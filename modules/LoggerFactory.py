@@ -59,3 +59,14 @@ class LoggerFactory:
                     logging.critical(logger.logger.label + ' has critical errors')
                 else:
                     logging.info('\x1b[92m' + logger.logger.label + ' has no critical errors' + '\x1b[0m' )
+
+    def writeResultsToDevice(self, powerUpCount):
+        for dut in self.duts:
+            if 'linuxLogger' in dut:
+                logger = dut['linuxLogger']
+                logging.info(logger.logger.label + ': write test-results to device')
+                logger.loginConsole()
+                result = {'powerUpCount': powerUpCount, 'failCount': logger.loggerFilter.criticalMessageCount }
+                jsonstr = json.dumps(result, indent = 4)
+                shellCmd = 'echo \'%s\' > ~/endurance-result.json' % jsonstr
+                logger.execShell(shellCmd)

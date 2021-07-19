@@ -20,3 +20,9 @@ class LoggerLinuxConsoleImx6():
                                     logging.ERROR)
                          ]
         self.loggerFilter = LoggerFilter(self.logger, filterEntries, label)
+
+    def loginConsole(self):
+        self.logger.sendConsoleCommands(['operator'])
+
+    def execShell(self, cmd):
+        self.logger.sendConsoleCommands([cmd])

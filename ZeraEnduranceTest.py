@@ -15,10 +15,10 @@ keyboardStopper = AbortSingleton()
 LoggingSetup('ZeraEnduranceTest.log')
 loggerFactory = LoggerFactory('configurations/SerialLogger.json')
 
-def callbackLinuxConsoleActive():
-    logging.info("callbackLinuxConsoleActive TODO")
 autoRun = AutoRun('configurations/AutoRun.json')
-autoRun.addCallback(callbackLinuxConsoleActive, 'LinuxConsoleActive')
+def callbackLinuxConsoleCommands():
+    loggerFactory.writeResultsToDevice(autoRun.currentPowerUpCount)
+autoRun.addCallback(callbackLinuxConsoleCommands, 'LinuxConsoleCommands')
 
 duts = None
 if not pcDebug:

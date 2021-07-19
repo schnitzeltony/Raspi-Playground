@@ -25,6 +25,7 @@ class LoggerSerialBase:
         self.logFile.write("Logging started at: " + str(datetime.now()) + '\n\n\n')
 
         self.thread = threading.Thread(target = self.__threadFunc)
+        self.lock = threading.Lock()
         LoggerSerialBase.threadColletionSingleton.addThread(self.thread)
         self.thread.start()
 
@@ -33,6 +34,12 @@ class LoggerSerialBase:
     def addLogConsumer(self, logConsumer):
         self.logExtraHandlers.append(logConsumer.parseLine)
 
+    def sendConsoleCommands(self, commandList):
+        self.lock.acquire()
+        for cmd in commandList:
+            self.serPort.write((cmd + '\n').encode())
+        self.lock.release()
+
     def __threadFunc(self):
         regEscape = re.compile(r'(\x9B|\x1B\[)[0-?]*[ -\/]*[@-~]')
         while True:
@@ -40,7 +47,9 @@ class LoggerSerialBase:
                 self.serPort.close()
                 self.logFile.close()
                 break
+            self.lock.acquire()
             line = self.serPort.readline().decode('unicode-escape').replace('\0', '').replace('\r', '').replace('\n', '')
+            self.lock.release()
             escaped = regEscape.sub('', line)
             if escaped != "":
                 for extraHandler in self.logExtraHandlers:
