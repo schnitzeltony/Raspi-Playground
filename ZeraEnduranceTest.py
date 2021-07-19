@@ -29,6 +29,9 @@ while not keyboardStopper.abortRequested():
     autoRun.runStep(duts)
     time.sleep(0.1)
 
+loggerFactory.showCriticalResults()
+print()
+
 logging.info("Wait for all threads to finish")
 threadCollector = ThreadCollectorSingleton()
 threadCollector.waitForAllToFinish()
@@ -38,5 +41,3 @@ if not pcDebug:
 
 logging.info("Done\n\n")
 
-loggerFactory.showCriticalResults()
-print()
