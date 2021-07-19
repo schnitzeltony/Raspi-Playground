@@ -32,6 +32,7 @@ while not keyboardStopper.abortRequested():
     else:
         keyboardStopper.requestAbort()
 
+print()
 loggerFactory.showCriticalResults()
 print()
 
