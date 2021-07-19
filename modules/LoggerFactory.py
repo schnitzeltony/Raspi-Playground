@@ -5,30 +5,39 @@ from .LoggerMT310s2SystemController import LoggerMT310s2SystemController
 
 class LoggerFactory:
     def __init__(self, configurationFileName):
-        try:
-            file = open(configurationFileName, 'r')
-            configuration = json.load(file)
-            file.close()
+        file = open(configurationFileName, 'r')
+        configuration = json.load(file)
+        file.close()
 
-            self.loggers = []
-
-            for entry in configuration['loggers']:
-                try:
-                    tty = entry['tty']
-                    label = entry['label']
-                    if entry['type'] == 'Linux-Console':
-                        self.loggers.append(LoggerLinuxConsoleImx6(label, tty, label + '.log'))
-                    elif entry['type'] == 'MT310s2-Systemcontroller':
-                        self.loggers.append(LoggerMT310s2SystemController(label, tty, label + '.log'))
+        self.duts = []
+        self.loggers = []
+        dutsLabels = []
+        for dut in configuration['duts']:
+            try:
+                dutLabel = dut['label']
+                if dutLabel in dutsLabels:
+                    raise RuntimeWarning("Double dut in: %s" % dut)
+                dutsLabels.append(dutLabel)
+                for port in dut['ports']:
+                    tty = port['tty']
+                    type = port['type']
+                    label = dutLabel + '-' + type
+                    if type == 'Linux-Console':
+                        dut['linuxLogger'] = LoggerLinuxConsoleImx6(label, tty, label + '.log')
+                        self.loggers.append(dut['linuxLogger'])
+                    elif type == 'Systemcontroller':
+                        dut['systemControllerLogger'] = LoggerMT310s2SystemController(label, tty, label + '.log')
+                        self.loggers.append(dut['systemControllerLogger'])
                     else:
-                        raise RuntimeWarning("Unknown logger type for: %s" % entry)
-                except RuntimeWarning as e:
-                    logging.warn("Could not load logger: %s" % entry)
-                    logging.warn(e)
-            
-        except (OSError, IOError) as e:
-            logging.warn('An error occured loading loggers:')
-            logging.warn(e)
+                        raise RuntimeWarning("Unknown logger type for: %s" % dut)
+                self.duts.append(dut)
+
+            except RuntimeWarning as e:
+                logging.warn("Could not load dut: %s" % dut)
+                logging.warn(e)
+            except (OSError, IOError) as e:
+                logging.warn('An error occured opening logger dut:')
+                logging.warn(e)
 
     def allFailedCritical(self):
         failedAll = True
