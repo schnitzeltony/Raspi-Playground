@@ -12,6 +12,7 @@ class LoggerFactory:
         self.duts = []
         self.loggers = []
         dutsLabels = []
+        ttys = []
         for dut in configuration['duts']:
             try:
                 dutLabel = dut['label']
@@ -20,6 +21,9 @@ class LoggerFactory:
                 dutsLabels.append(dutLabel)
                 for port in dut['ports']:
                     tty = port['tty']
+                    if tty in ttys:
+                        raise RuntimeWarning("tty already in use: %s" % dut)
+                    ttys.append(tty)
                     type = port['type']
                     label = dutLabel + '-' + type
                     if type == 'Linux-Console':

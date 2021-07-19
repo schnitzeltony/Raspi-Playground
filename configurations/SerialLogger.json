@@ -17,11 +17,11 @@
             "label": "DUT2",
             "ports": [
                 {
-                    "tty": "/dev/ttyUSB0",
+                    "tty": "/dev/ttyUSB2",
                     "type": "Systemcontroller"
                 },
                 {
-                    "tty": "/dev/ttyUSB1",
+                    "tty": "/dev/ttyUSB3",
                     "type": "Linux-Console"
                 }
             ]
