@@ -4,7 +4,7 @@
         "onTimeSeconds": 150,
         "powerOffDelaySeconds": 10,
         "abortOnAllFailed": true,
-        "loopCount": 3
+        "loopCount": 2
     },
     "loops" : [
         {
@@ -17,25 +17,18 @@
         {
             "type": "onDelayType",
             "values" : [
-                { "seconds": 2 },
-                { "seconds": 4 },
+                { "seconds": 3 },
                 { "seconds": 6 },
-                { "seconds": 8 }
+                { "seconds": 9 }
             ]
         },
         {
             "type": "offTime",
             "values" : [
-                { "minutes": 0.1 },
-                { "minutes": 0.2 },
                 { "minutes": 0.5 },
-                { "minutes": 1 },
                 { "minutes": 2 },
-                { "minutes": 5 },
                 { "minutes": 10 },
-                { "minutes": 30 },
-                { "minutes": 60 },
-                { "minutes": 120 }
+                { "minutes": 30 }
             ]
         }
     ]
