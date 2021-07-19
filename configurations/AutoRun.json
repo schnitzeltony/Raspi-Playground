@@ -2,7 +2,8 @@
     "common" : {
         "buttonPressSeconds": 1,
         "onTimeSeconds": 300,
-        "powerOffDelaySeconds": 10
+        "powerOffDelaySeconds": 10,
+        "loopCount": 3
     },
     "loops" : [
         {

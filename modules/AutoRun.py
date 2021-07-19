@@ -3,6 +3,7 @@ import logging
 from datetime import datetime
 from datetime import timedelta
 from enum import Enum
+from .KeyboardStopper import AbortSingleton
 
 class AutoStepTypes(Enum):
     INFO = 0
@@ -22,6 +23,7 @@ class AutoRun:
             self.buttonPressSeconds = 1.0
             self.onTimeSeconds = 150
             self.powerOffDelaySeconds = 30
+            self.loopCountMax = 3
             if 'common' in configuration:
                 common = configuration['common']
                 if 'buttonPressSeconds' in common:
@@ -30,6 +32,8 @@ class AutoRun:
                     self.onTimeSeconds = common['onTimeSeconds']
                 if 'powerOffDelaySeconds' in common:
                     self.powerOffDelaySeconds = common['powerOffDelaySeconds']
+                if 'loopCount' in common:
+                    self.loopCountMax = common['loopCount']
 
             # restruct loop data for more simple handling
             self.loops = []
@@ -64,6 +68,7 @@ class AutoRun:
                 for cmd in self.commandList:
                     if 'delay' in cmd:
                         self.estimatedDuration = self.estimatedDuration + timedelta(seconds = cmd['delay'])
+                logging.info("*** Estimated time total: %s ***\n" % (self.estimatedDuration * self.loopCountMax))
             else:
                 logging.warning('No loops found')
 
@@ -87,9 +92,13 @@ class AutoRun:
                 self.currentStepNo = 0
             # Start of new loop
             if self.currentStepNo == 0:
-                self.currentSequenceNo = self.currentSequenceNo + 1
-                logging.info("*** Start loop %i ***\n" % self.currentSequenceNo)
-                logging.info("*** Estimated time: %s ***\n" % self.estimatedDuration)
+                if self.currentSequenceNo < self.loopCountMax-1:
+                    self.currentSequenceNo = self.currentSequenceNo + 1
+                    logging.info("*** Start loop %i ***\n" % self.currentSequenceNo)
+                    logging.info("*** Estimated time loop: %s ***" % self.estimatedDuration)
+                else:
+                    logging.info("*** Stop loop ***")
+                    AbortSingleton.requestAbort()
 
             currCmd = self.commandList[self.currentStepNo]
             if 'delay' in currCmd:
