@@ -75,7 +75,7 @@ class AutoRun:
                         self.estimatedDuration = self.estimatedDuration + timedelta(seconds = cmd['delay'])
                 logging.info("*** Estimated time total: %s ***\n" % (self.estimatedDuration * self.loopCountMax))
             else:
-                logging.warning('No loops found')
+                logging.warn('No loops found')
 
         except (OSError, IOError) as e:
             logging.warn("An error occured loading AutoRun configuration:")
