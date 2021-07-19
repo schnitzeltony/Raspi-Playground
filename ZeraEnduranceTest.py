@@ -26,7 +26,7 @@ if not pcDebug:
     logging.debug(duts)
 
 while not keyboardStopper.abortRequested():
-    if not loggerFactory.allFailedCritical():
+    if not autoRun.abortOnAllFailed or not loggerFactory.allFailedCritical():
         autoRun.runStep(duts)
         time.sleep(0.1)
     else:

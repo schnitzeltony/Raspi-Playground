@@ -3,6 +3,7 @@
         "buttonPressSeconds": 1,
         "onTimeSeconds": 300,
         "powerOffDelaySeconds": 10,
+        "abortOnAllFailed": true,
         "loopCount": 3
     },
     "loops" : [

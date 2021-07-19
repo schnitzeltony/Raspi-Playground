@@ -24,6 +24,7 @@ class AutoRun:
             self.onTimeSeconds = 150
             self.powerOffDelaySeconds = 30
             self.loopCountMax = 3
+            self.abortOnAllFailed = True
             if 'common' in configuration:
                 common = configuration['common']
                 if 'buttonPressSeconds' in common:
@@ -34,6 +35,8 @@ class AutoRun:
                     self.powerOffDelaySeconds = common['powerOffDelaySeconds']
                 if 'loopCount' in common:
                     self.loopCountMax = common['loopCount']
+                if 'abortOnAllFailed' in common:
+                    self.abortOnAllFailed = common['abortOnAllFailed']
 
             # restruct loop data for more simple handling
             self.loops = []
