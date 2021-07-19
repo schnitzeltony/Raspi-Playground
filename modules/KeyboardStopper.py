@@ -5,11 +5,9 @@ class AbortSingleton():
     instance = None
 
     def abortRequested(self):
-        AbortSingleton.__makeInstance()
         return AbortSingleton.instance.exit_event.is_set()
 
-    def requestAbort():
-        AbortSingleton.__makeInstance()
+    def requestAbort(self):
         AbortSingleton.instance.exit_event.set()
 
     class __SignalHandler:
@@ -20,10 +18,7 @@ class AbortSingleton():
         def __sigIntHandler(self, signum, frame):
             self.exit_event.set()
 
-    def __makeInstance():
+    def __init__(self):
         if not AbortSingleton.instance:
             AbortSingleton.instance = AbortSingleton.__SignalHandler()
-
-    def __init__(self):
-        AbortSingleton.__makeInstance()
 

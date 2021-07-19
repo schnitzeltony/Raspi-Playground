@@ -33,9 +33,10 @@ class LoggerFactory:
     def allFailedCritical(self):
         failedAll = True
         for logger in self.loggers:
-            if not logger.loggerFilter.hasCriticalFilters:
-                failedAll = False
-                break
+            if logger.loggerFilter.hasCriticalFilters:
+                if logger.loggerFilter.criticalMessageCount == 0:
+                    failedAll = False
+                    break
         return failedAll
 
     def showCriticalResults(self):
