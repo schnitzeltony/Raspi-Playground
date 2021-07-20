@@ -20,6 +20,8 @@ class AutoRun:
             configuration = json.load(file)
             file.close()
 
+            self.keyboardStopper = AbortSingleton()
+
             # common settings
             self.buttonPressSeconds = 1.0
             self.onTimeSeconds = 150
@@ -103,7 +105,7 @@ class AutoRun:
                     logging.info("*** Estimated time loop: %s ***" % self.estimatedDuration)
                 else:
                     logging.info("*** Stop loop ***")
-                    AbortSingleton.requestAbort()
+                    self.keyboardStopper.requestAbort()
 
             currCmd = self.commandList[self.currentStepNo]
             if 'delay' in currCmd:
