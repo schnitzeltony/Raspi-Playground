@@ -24,7 +24,6 @@ class AutoRun:
 
             # common settings
             self.buttonPressSeconds = 1.0
-            self.onTimeSeconds = 150
             self.powerOffDelaySeconds = 30
             self.loopCountMax = 3
             self.abortOnAllFailed = True
@@ -32,8 +31,6 @@ class AutoRun:
                 common = configuration['common']
                 if 'buttonPressSeconds' in common:
                     self.buttonPressSeconds = common['buttonPressSeconds']
-                if 'onTimeSeconds' in common:
-                    self.onTimeSeconds = common['onTimeSeconds']
                 if 'powerOffDelaySeconds' in common:
                     self.powerOffDelaySeconds = common['powerOffDelaySeconds']
                 if 'loopCount' in common:
@@ -50,7 +47,7 @@ class AutoRun:
                     for checkLoop in self.loops:
                         if checkLoop['type'] == loop['type']:
                             raise RuntimeWarning('Loop of same type already found - ignore loop')
-                    if loop['type'] not in ["offTime", "offType", "buttonOnDelay"]:
+                    if loop['type'] not in ["offTime", "offType", "buttonOnDelay", "powerOnTime"]:
                         raise RuntimeWarning('Unknown loop type - ignoring')
 
                     self.loops.append(loop)
@@ -181,6 +178,7 @@ class AutoRun:
         offType = "Button"
         offTimeMinutes = 15
         buttonOnDelaySeconds = 3
+        powerOnTimeSeconds = 150
 
         # data for current loop state
         for loopNum in range(len(self.loops)):
@@ -194,6 +192,8 @@ class AutoRun:
                         raise RuntimeWarning('Unknown (off) type in: %s - ignoring' % currLoop)
                 elif currLoop['type'] == 'buttonOnDelay':
                     buttonOnDelaySeconds = currLoop['values'][self.loopListCurr[loopNum]]['seconds']
+                elif currLoop['type'] == 'powerOnTime':
+                    powerOnTimeSeconds = currLoop['values'][self.loopListCurr[loopNum]]['seconds']
             except RuntimeWarning as e:
                 logging.warn(e)
 
@@ -202,11 +202,13 @@ class AutoRun:
             strOffTime = '%.2fmin' % offTimeMinutes
         else:
             strOffTime = '%.2fs' % (offTimeMinutes * 60)
-        self.commandList.append({ 'type': AutoStepTypes.INFO, 'msg': '*** Start sequence: OnDelay: %is' % buttonOnDelaySeconds +
-                                 ' / OffType: ' + offType + ' / OffTime: %s' % strOffTime + ' ***\n'} )
+        self.commandList.append({ 'type': AutoStepTypes.INFO, 'msg': '*** Start sequence: ButtonOnDelay: %is' % buttonOnDelaySeconds +
+                                 ' / OnTime: %is' % powerOnTimeSeconds +
+                                 ' / OffType: ' + offType +
+                                 ' / OffTime: %s' % strOffTime + ' ***\n'} )
         self.commandList.append({ 'type': AutoStepTypes.POWER_ON, 'delay': buttonOnDelaySeconds } )
         self.commandList.append({ 'type': AutoStepTypes.PUSH_BUTTON, 'delay': self.buttonPressSeconds } )
-        self.commandList.append({ 'type': AutoStepTypes.WAIT, 'delay': self.onTimeSeconds } )
+        self.commandList.append({ 'type': AutoStepTypes.WAIT, 'delay': powerOnTimeSeconds } )
         self.commandList.append({ 'type': AutoStepTypes.CALLBACK, 'name': 'LinuxConsoleCommands' } )
         self.commandList.append({ 'type': AutoStepTypes.WAIT, 'delay': 10 } )
         if offType == "Button":

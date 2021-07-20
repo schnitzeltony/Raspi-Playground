@@ -1,7 +1,6 @@
 {
     "common" : {
         "buttonPressSeconds": 1,
-        "onTimeSeconds": 150,
         "powerOffDelaySeconds": 10,
         "abortOnAllFailed": true,
         "loopCount": 2
@@ -29,6 +28,14 @@
                 { "minutes": 2 },
                 { "minutes": 10 },
                 { "minutes": 30 }
+            ]
+        },
+        {
+            "type": "powerOnTime",
+            "values" : [
+                { "seconds": 10 },
+                { "seconds": 60 },
+                { "seconds": 150 }
             ]
         }
     ]
