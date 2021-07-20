@@ -15,7 +15,7 @@
             ]
         },
         {
-            "type": "onDelayType",
+            "type": "buttonOnDelay",
             "values" : [
                 { "seconds": 3 },
                 { "seconds": 6 },

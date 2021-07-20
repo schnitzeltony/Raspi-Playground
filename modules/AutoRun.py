@@ -50,7 +50,7 @@ class AutoRun:
                     for checkLoop in self.loops:
                         if checkLoop['type'] == loop['type']:
                             raise RuntimeWarning('Loop of same type already found - ignore loop')
-                    if loop['type'] not in ["offTime", "offType", "onDelayType"]:
+                    if loop['type'] not in ["offTime", "offType", "buttonOnDelay"]:
                         raise RuntimeWarning('Unknown loop type - ignoring')
 
                     self.loops.append(loop)
@@ -180,7 +180,7 @@ class AutoRun:
         # defaults
         offType = "Button"
         offTimeMinutes = 15
-        onDelaySeconds = 3
+        buttonOnDelaySeconds = 3
 
         # data for current loop state
         for loopNum in range(len(self.loops)):
@@ -192,8 +192,8 @@ class AutoRun:
                     offType = currLoop['values'][self.loopListCurr[loopNum]]['type']
                     if offType not in ['Button', 'Power']:
                         raise RuntimeWarning('Unknown (off) type in: %s - ignoring' % currLoop)
-                elif currLoop['type'] == 'onDelayType':
-                    onDelaySeconds = currLoop['values'][self.loopListCurr[loopNum]]['seconds']
+                elif currLoop['type'] == 'buttonOnDelay':
+                    buttonOnDelaySeconds = currLoop['values'][self.loopListCurr[loopNum]]['seconds']
             except RuntimeWarning as e:
                 logging.warn(e)
 
@@ -202,9 +202,9 @@ class AutoRun:
             strOffTime = '%.2fmin' % offTimeMinutes
         else:
             strOffTime = '%.2fs' % (offTimeMinutes * 60)
-        self.commandList.append({ 'type': AutoStepTypes.INFO, 'msg': '*** Start sequence: OnDelay: %is' % onDelaySeconds +
+        self.commandList.append({ 'type': AutoStepTypes.INFO, 'msg': '*** Start sequence: OnDelay: %is' % buttonOnDelaySeconds +
                                  ' / OffType: ' + offType + ' / OffTime: %s' % strOffTime + ' ***\n'} )
-        self.commandList.append({ 'type': AutoStepTypes.POWER_ON, 'delay': onDelaySeconds } )
+        self.commandList.append({ 'type': AutoStepTypes.POWER_ON, 'delay': buttonOnDelaySeconds } )
         self.commandList.append({ 'type': AutoStepTypes.PUSH_BUTTON, 'delay': self.buttonPressSeconds } )
         self.commandList.append({ 'type': AutoStepTypes.WAIT, 'delay': self.onTimeSeconds } )
         self.commandList.append({ 'type': AutoStepTypes.CALLBACK, 'name': 'LinuxConsoleCommands' } )
