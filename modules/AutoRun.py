@@ -99,7 +99,7 @@ class AutoRun:
                 self.currentStepNo = 0
             # Start of new loop
             if self.currentStepNo == 0:
-                if self.loopCountMax == 0 or self.currentSequenceNo < self.loopCountMax-1:
+                if self.loopCountMax == 0 or self.currentSequenceNo < self.loopCountMax:
                     self.currentSequenceNo = self.currentSequenceNo + 1
                     logging.info("*** Start loop %i ***\n" % self.currentSequenceNo)
                     logging.info("*** Estimated time loop: %s ***" % self.estimatedDuration)
