@@ -3,38 +3,35 @@
         "buttonPressSeconds": 1,
         "powerOffDelaySeconds": 10,
         "abortOnAllFailed": true,
-        "loopCount": 2
+        "loopCount": 0
     },
     "loops" : [
         {
-            "type": "offType",
+            "type": "buttonOnDelay",
             "values" : [
-                { "type": "Power" },
-                { "type": "Button" }
+                { "seconds": 4 },
+                { "seconds": 8 }
             ]
         },
         {
-            "type": "buttonOnDelay",
+            "type": "offType",
             "values" : [
-                { "seconds": 3 },
-                { "seconds": 6 },
-                { "seconds": 9 }
+                { "type": "Button" },
+                { "type": "Power" }
             ]
         },
         {
             "type": "offTime",
             "values" : [
-                { "minutes": 0.5 },
-                { "minutes": 2 },
-                { "minutes": 10 },
+                { "minutes": 1 },
                 { "minutes": 30 }
             ]
         },
         {
             "type": "powerOnTime",
             "values" : [
-                { "seconds": 10 },
-                { "seconds": 60 },
+                { "seconds": 90 },
+                { "seconds": 120 },
                 { "seconds": 150 }
             ]
         }
