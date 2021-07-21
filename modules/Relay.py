@@ -2,8 +2,10 @@ import RPi.GPIO as GPIO
 
 class Relay():
     def switch(self, on):
-        GPIO.output(self.gpioPin, GPIO.LOW if on else GPIO.HIGH)
+        setVal = self.inverted ^ on
+        GPIO.output(self.gpioPin, GPIO.HIGH if setVal else GPIO.LOW)
 
-    def __init__(self, gpioPin):
+    def __init__(self, gpioPin, inverted = True):
         GPIO.setup(gpioPin, GPIO.OUT)
         self.gpioPin = gpioPin
+        self.inverted = inverted
