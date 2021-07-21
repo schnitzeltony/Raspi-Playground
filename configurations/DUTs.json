@@ -1,4 +1,24 @@
 {
+    "Comments": [
+        " Label:",
+        "   * mandatory",
+        "   * text displayed in logs",
+        " OnOffGPIO",
+        "   * optional",
+        "   * the GPIO either servo or DUT power switch is connected to",
+        "     if not set meter will switch is not controlled",
+        " OnOffType",
+        "   * mandatory for OnOffGPIO set",
+        "   * can be either 'Servo' or 'Switch'",
+        " ServoPushPos/ServoReleasePos",
+        "   * mandatory for OnOffType == 'Servo'",
+        "   * Servo positions",
+        "   * valid range [0;1]",
+        " RelayGPIO",
+        "   * optional",
+        "   * GPIO a power switch for mains is connected to",
+        ""
+    ],
     "DUTs": [
         {
             "Label": "DUT1",
