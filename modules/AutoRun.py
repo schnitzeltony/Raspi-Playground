@@ -90,6 +90,8 @@ class AutoRun:
                         if 'Servo' in dut:
                             logging.debug('Action: Release button on %s' % dut['Label'])
                             dut['Servo'].moveToPosition(dut['ServoReleasePos'], True)
+                        elif 'Switch' in dut:
+                            pass
 
             self.currentStepNo = self.currentStepNo + 1
             if self.currentStepNo >= len(self.commandList):

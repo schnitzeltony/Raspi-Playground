@@ -2,14 +2,16 @@
     "DUTs": [
         {
             "Label": "DUT1",
-            "ServoGPIO": 17,
+            "OnOffGPIO": 17,
+            "OnOffType": "Servo",
             "ServoPushPos": 0.75,
             "ServoReleasePos": 0.25,
             "RelayGPIO": 23
         },
         {
             "Label": "DUT2",
-            "ServoGPIO": 27,
+            "OnOffGPIO": 27,
+            "OnOffType": "Servo",
             "ServoPushPos": 0.75,
             "ServoReleasePos": 0.25,
             "RelayGPIO": 24

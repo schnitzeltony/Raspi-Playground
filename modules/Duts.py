@@ -16,12 +16,18 @@ class DUTs:
                 try:
                     if not 'Label' in entry:
                         raise RuntimeWarning("DUT has no label in: %s" % entry)
-                    if 'ServoGPIO' in entry:
-                        # check for mandatory
-                        if 'ServoPushPos' in entry and 'ServoReleasePos' in entry:
-                            entry["Servo"] = Servo(entry['ServoGPIO'])
+                    if 'OnOffGPIO' in entry:
+                        if not 'OnOffType' in entry:
+                            raise RuntimeWarning("DUT definition incomplete - OnOffType is mandatory in: %s" % entry)
+                        if entry["OnOffType"] == 'Servo':
+                            if 'ServoPushPos' in entry and 'ServoReleasePos' in entry:
+                                entry["Servo"] = Servo(entry['OnOffGPIO'])
+                            else:
+                                raise RuntimeWarning("Servo definition incomplete - ServoPushPos/ServoReleasePos are mandatory in: %s" % entry)
+                        elif entry["OnOffType"] == 'Switch':
+                            pass
                         else:
-                            raise RuntimeWarning("Servo definition imcomplete - ServoPushPos/ServoReleasePos are mandatory in: %s" % entry)
+                            raise RuntimeWarning("Unknown OnOffType in: %s" % entry)
                     if 'RelayGPIO' in entry:
                         entry["Relay"] = Relay(entry['RelayGPIO'])
                     self.DUTs.append(entry)
