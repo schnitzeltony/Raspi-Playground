@@ -25,7 +25,7 @@ class DUTs:
                             else:
                                 raise RuntimeWarning("Servo definition incomplete - ServoPushPos/ServoReleasePos are mandatory in: %s" % entry)
                         elif entry["OnOffType"] == 'Switch':
-                            pass
+                            entry["Switch"] = Relay(entry['OnOffGPIO'])
                         else:
                             raise RuntimeWarning("Unknown OnOffType in: %s" % entry)
                     if 'RelayGPIO' in entry:

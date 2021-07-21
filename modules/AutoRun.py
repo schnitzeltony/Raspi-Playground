@@ -91,7 +91,8 @@ class AutoRun:
                             logging.debug('Action: Release button on %s' % dut['Label'])
                             dut['Servo'].moveToPosition(dut['ServoReleasePos'], True)
                         elif 'Switch' in dut:
-                            pass
+                            logging.debug('Action: Release button (by switch) on %s' % dut['Label'])
+                            dut['Switch'].switch(False)
 
             self.currentStepNo = self.currentStepNo + 1
             if self.currentStepNo >= len(self.commandList):
@@ -138,6 +139,9 @@ class AutoRun:
                         if 'Servo' in dut:
                             logging.debug('Action: Press button on %s' % dut['Label'])
                             dut['Servo'].moveToPosition(dut['ServoPushPos'], False)
+                        elif 'Switch' in dut:
+                            logging.debug('Action: Press button (by switch) on %s' % dut['Label'])
+                            dut['Switch'].switch(True)
 
             elif currCmd['type'] == AutoStepTypes.WAIT:
                 logging.info("*** Wait ***")
