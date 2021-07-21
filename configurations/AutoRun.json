@@ -5,6 +5,22 @@
         "abortOnAllFailed": true,
         "loopCount": 0
     },
+    "CommentsOnLoops": [
+        " AutoRun supports nested loops:",
+        " * 'loops' elements are looped as: Topmost -> outer / bottom -> inner",
+        " * The following loop types are supported:",
+        "   * buttonOnDelay: The time between switching mains on and pressing the",
+        "     power-on button (or switch) can be iterated by 'values' array containing",
+        "     time in 'seconds'",
+        "   * offType: 'values' array contains 'type' entries with 'values':",
+        "     * 'Button': DUT is switched off by button before mains is switched off",
+        "     * 'Power': DUT is switched switching off mains",
+        "   * offTime: 'values' array contains 'minutes' entries for delay between",
+        "     powering off and on",
+        "   * powerOnTime: 'values' array contains 'seconds' entries for delay between",
+        "     power button was pushed and DUT is switched off",
+        ""
+    ],
     "loops" : [
         {
             "type": "buttonOnDelay",
